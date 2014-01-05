@@ -24,8 +24,8 @@ hash of parameters:
           }
         };
       })
-      .config(function (commandDispatcherProvider, myHelloCommand) {
-        commandDispatcher.registerCommand('sayHello', myHelloCommand);
+      .config(function (commandDispatcherProvider) {
+        commandDispatcher.registerCommand('sayHello', 'myHelloCommand');
       });
 
 Then in a controller:
@@ -47,8 +47,8 @@ parameters: the command object that is listened for, the event name and the comm
           }
         }
       })
-      .config(function (commandDispatcherProvider, myHelloCommandListener) {
-        commandDispatcherProvider.registerListener('beforeInitialize', 'sayHello', myHelloListener);
+      .config(function (commandDispatcherProvider) {
+        commandDispatcherProvider.registerListener('beforeInitialize', 'sayHello', 'myHelloListener');
       });
 
 Valid event types are: `beforeInitialize`, `afterInitialize`, `beforeExecute` and `afterExecute`.
