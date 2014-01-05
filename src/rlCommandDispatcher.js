@@ -20,34 +20,34 @@
               + 'commandDispatcherProvider before registering the listener?');
           }
           
-          var command = new ($injector.get(commands[commandName]));
+          var command = angular.copy($injector.get(commands[commandName]));
           
           if (typeof command.initialize === 'function') {
-            if (beforeInitializeListeners[commandName]) {
-              angular.forEach(beforeInitializeListeners[commandName], function (listener) {
+            if (listeners.beforeInitializeListeners[commandName]) {
+              angular.forEach(listeners.beforeInitializeListeners[commandName], function (listener) {
                 $injector.get(listener).notify(command, 'beforeInitialize', commandName);
               });
             }
             
             command.initialize(commandParams);
             
-            if (afterInitializeListeners[commandName]) {
-              angular.forEach(afterInitializeListeners[commandName], function (listener) {
+            if (listeners.afterInitializeListeners[commandName]) {
+              angular.forEach(listeners.afterInitializeListeners[commandName], function (listener) {
                 $injector.get(listener).notify(command, 'afterInitialize', commandName);
               });
             }
           }
           
-          if (beforeExecuteListeners[commandName]) {
-            angular.forEach(beforeExecuteListeners[commandName], function (listener) {
+          if (listeners.beforeExecuteListeners[commandName]) {
+            angular.forEach(listeners.beforeExecuteListeners[commandName], function (listener) {
               $injector.get(listener).notify(command, 'beforeExecute', commandName);
             });
           }
           
           command.execute();
           
-          if (afterExecuteListeners[commandName]) {
-            angular.forEach(beforeExecuteListeners[commandName], function (listener) {
+          if (listeners.afterExecuteListeners[commandName]) {
+            angular.forEach(listeners.afterExecuteListeners[commandName], function (listener) {
               $injector.get(listener).notify(command, 'afterExecute', commandName);
             });
           }
@@ -61,13 +61,33 @@
       this.registerListener = function (listenerType, commandName, listenerService) {
         switch (listenerType) {
           case 'beforeInitialize':
+            if (!listeners.beforeInitializeListeners[commandName]) {
+              listeners.beforeInitializeListeners[commandName] = [];
+            }
+            
             listeners.beforeInitializeListeners[commandName].push(listenerService);
+            break;
           case 'afterInitialize':
+            if (!listeners.afterInitializeListeners[commandName]) {
+              listeners.afterInitializeListeners[commandName] = [];
+            }
+            
             listeners.afterInitializeListeners[commandName].push(listenerService);
+            break;
           case 'beforeExecute':
+            if (!listeners.beforeExecuteListeners[commandName]) {
+              listeners.beforeExecuteListeners[commandName] = [];
+            }
+            
             listeners.beforeExecuteListeners[commandName].push(listenerService);
+            break;
           case 'afterExecute':
+            if (!listeners.afterExecuteListeners[commandName]) {
+              listeners.afterExecuteListeners[commandName] = [];
+            }
+            
             listeners.afterExecuteListeners[commandName].push(listenerService);
+            break;
           default:
             throw new Error('"'+ listenerType +'" is an unsupported listener type.');
         }

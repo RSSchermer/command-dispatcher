@@ -45,10 +45,10 @@ parameters: the command object that is listened for, the event name and the comm
               command.name += ' the Builder';
             }
           }
-        }
+        };
       })
       .config(function (commandDispatcherProvider) {
-        commandDispatcherProvider.registerListener('beforeInitialize', 'sayHello', 'myHelloListener');
+        commandDispatcherProvider.registerListener('afterInitialize', 'sayHello', 'myHelloListener');
       });
 
 Valid event types are: `beforeInitialize`, `afterInitialize`, `beforeExecute` and `afterExecute`.
