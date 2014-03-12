@@ -13,16 +13,16 @@ hash of parameters:
     var myApp = angular.module('myApp', ['rlCommandDispatcher'])
       .config(function (commandDispatcherProvider) {
         commandDispatcherProvider.registerCommand('sayHello', {
-            name: null,
+          name: null,
           
-            initialize: function (params) {
-              this.name = params.name;
-            },
+          initialize: function (params) {
+            this.name = params.name;
+          },
           
-            execute: function () {
-              console.log('Hello '+ this.name || 'World' + '!');
-            }
-          });
+          execute: function () {
+            console.log('Hello '+ this.name || 'World' + '!');
+          }
+        });
       });
 
 Then in a controller:
@@ -36,12 +36,12 @@ parameters: the command object that is listened for, the event name and the comm
 
     myApp.config(function (commandDispatcherProvider) {
         commandDispatcherProvider.registerListener('afterInitialize', 'sayHello', {
-            notify: function (command) {
-              if (command.name === 'Bob') {
-                command.name += ' the Builder';
-              }
+          notify: function (command) {
+            if (command.name === 'Bob') {
+              command.name += ' the Builder';
             }
-          });
+          }
+        });
       });
 
 Valid event types are: `beforeInitialize`, `afterInitialize`, `beforeExecute` and `afterExecute`.
