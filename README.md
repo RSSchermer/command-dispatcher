@@ -11,21 +11,18 @@ Create an Angular service with at least 1 method `execute()` and optionally one 
 hash of parameters: 
 
     var myApp = angular.module('myApp', ['rlCommandDispatcher'])
-      .factory('myHelloCommand', function () {
-        return {
-          name: null,
-          
-          initialize: function (params) {
-            this.name = params.name;
-          },
-          
-          execute: function () {
-            console.log('Hello '+ this.name || 'World' + '!');
-          }
-        };
-      })
       .config(function (commandDispatcherProvider) {
-        commandDispatcher.registerCommand('sayHello', 'myHelloCommand');
+        commandDispatcherProvider.registerCommand('sayHello', {
+            name: null,
+          
+            initialize: function (params) {
+              this.name = params.name;
+            },
+          
+            execute: function () {
+              console.log('Hello '+ this.name || 'World' + '!');
+            }
+          });
       });
 
 Then in a controller:
@@ -37,18 +34,14 @@ Then in a controller:
 Optionally register a listener. A listener should at least define the method `notify()`, which will receive 3
 parameters: the command object that is listened for, the event name and the command name. 
 
-    myApp
-      .factory('myHelloCommandListener', function () {
-        return {
-          notify: function (command) {
-            if (command.name === 'Bob') {
-              command.name += ' the Builder';
+    myApp.config(function (commandDispatcherProvider) {
+        commandDispatcherProvider.registerListener('afterInitialize', 'sayHello', {
+            notify: function (command) {
+              if (command.name === 'Bob') {
+                command.name += ' the Builder';
+              }
             }
-          }
-        };
-      })
-      .config(function (commandDispatcherProvider) {
-        commandDispatcherProvider.registerListener('afterInitialize', 'sayHello', 'myHelloListener');
+          });
       });
 
 Valid event types are: `beforeInitialize`, `afterInitialize`, `beforeExecute` and `afterExecute`.

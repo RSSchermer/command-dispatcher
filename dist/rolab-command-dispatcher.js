@@ -1,3 +1,11 @@
+/**
+ * Simple command dispatcher module for AngularJS.
+ * @version v0.0.2 - 2014-03-12
+ * @link https://github.com/RSSchermer/command-dispatcher
+ * @author R.S. Schermer
+ * @license MIT License, http://www.opensource.org/licenses/MIT
+ */
+
 'use strict';
 
 (function() {
