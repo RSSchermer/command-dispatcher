@@ -3,6 +3,6 @@
   "version": "0.0.3",
   "description": "Simple command dispatcher module for AngularJS.",
   "dependencies": {
-    "angular": "*"
+    "angular": "~1.3"
   }
 }
