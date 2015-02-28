@@ -1,6 +1,6 @@
 {
   "name": "rolab-command-dispatcher",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Simple command dispatcher module for AngularJS.",
   "dependencies": {
     "angular": "~1.3"
