@@ -6,42 +6,58 @@ provider. I needed a way to serialize the action that was unsuccessfull so it co
 re-authentication. Using the command pattern and storing the serialized command in local storage seemed like a
 reasonable solution.
 
+## Installation
+
+```shell
+bower install rolab-command-dispatcher --save
+```
+
 ## Usage
-Create an Angular service with at least 1 method `execute()` and optionally one method `initialize()`, which takes a
-hash of parameters: 
+Create an command with at least an `execute()` method and optionally an `initialize()` method, which takes a
+hash of parameters:
 
-    var myApp = angular.module('myApp', ['rlCommandDispatcher'])
-      .config(function (commandDispatcherProvider) {
-        commandDispatcherProvider.registerCommand('sayHello', {
-          name: null,
-          
-          initialize: function (params) {
-            this.name = params.name;
-          },
-          
-          execute: function () {
-            console.log('Hello '+ this.name || 'World' + '!');
-          }
-        });
-      });
+```js
+var myApp = angular.module('myApp', ['rlCommandDispatcher'])
+  .config(function (commandDispatcherProvider) {
+    commandDispatcherProvider.registerCommand('sayHello', {
+      name: null,
 
-Then in a controller:
+      initialize: function (params) {
+        this.name = params.name;
+      },
 
-    myApp.controller('myCtrl', function (commandDispatcher) {
-      commandDispatcher.dispatch('sayHello', {name: 'Bob'});
+      execute: function () {
+        console.log('Hello '+ this.name || 'World' + '!');
+      }
     });
+  });
+```
 
-Optionally register a listener. A listener should at least define the method `notify()`, which will receive 3
-parameters: the command object that is listened for, the event name and the command name. 
+You can then dispatch the command in a controller:
 
-    myApp.config(function (commandDispatcherProvider) {
-        commandDispatcherProvider.registerListener('afterInitialize', 'sayHello', {
-          notify: function (command) {
-            if (command.name === 'Bob') {
-              command.name += ' the Builder';
-            }
-          }
-        });
-      });
+```js
+myApp.controller('myCtrl', function (commandDispatcher) {
+  commandDispatcher.dispatch('sayHello', {name: 'Bob'});
+});
+```
 
-Valid event types are: `beforeInitialize`, `afterInitialize`, `beforeExecute` and `afterExecute`.
+Optionally, you can register listeners for 4 different types of event: `beforeInitialize`, `afterInitialize`,
+`beforeExecute` and `afterExecute`. A listener will be called with 3 parameters: the command object, the event name
+and the command name:
+
+```js
+myApp.config(function (commandDispatcherProvider) {
+    commandDispatcherProvider.registerListener('afterInitialize', 'sayHello', {
+      notify: function (command, eventName, commandName) {
+        if (command.name === 'Bob') {
+          command.name += ' the Builder';
+        }
+      }
+    });
+  });
+```
+
+
+## License
+
+MIT
