@@ -47,11 +47,9 @@ and the command name:
 
 ```js
 myApp.config(function (commandDispatcherProvider) {
-    commandDispatcherProvider.registerListener('afterInitialize', 'sayHello', {
-      notify: function (command, eventName, commandName) {
-        if (command.name === 'Bob') {
-          command.name += ' the Builder';
-        }
+    commandDispatcherProvider.registerListener('afterInitialize', 'sayHello', function (command, eventName, commandName) {
+      if (command.name === 'Bob') {
+        command.name += ' the Builder';
       }
     });
   });
